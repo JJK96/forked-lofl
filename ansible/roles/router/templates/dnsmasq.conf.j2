@@ -1,5 +1,7 @@
 # Port
 port=5353
+interface={{ network_interface }}
+bind-interfaces
 
 # Victim network DNS server
 {% for victim_domain in victim_domains %}
