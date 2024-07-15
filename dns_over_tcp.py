@@ -23,7 +23,7 @@ except ImportError:
 dns_server = ('127.0.0.1', 5353)
 whitelist = []
 verbose = False
-bind_ip = '127.0.0.1'
+bind_ip = '0.0.0.0'
 
 
 def socket_receive(sock, num_octets):
