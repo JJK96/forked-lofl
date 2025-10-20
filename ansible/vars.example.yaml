@@ -5,3 +5,4 @@ network_interface: enp0s5
 proxy: socks5://127.0.0.1:8080
 routes:
       - 10.0.0.0/8
+in_interface: tun0

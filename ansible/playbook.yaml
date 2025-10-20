@@ -1,5 +1,6 @@
 - name: Deploy router
-  become: yes
   hosts: all
+  tasks:
   roles:
+    - role: vpn
     - role: router

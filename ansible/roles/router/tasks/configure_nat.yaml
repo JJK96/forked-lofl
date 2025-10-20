@@ -8,13 +8,13 @@
   iptables:
     chain: FORWARD
     in_interface: "{{item}}"
-    out_interface: "{{ network_interface }}"
+    out_interface: "{{ in_interface }}"
     match: state
     ctstate: RELATED,ESTABLISHED
     jump: ACCEPT
 - name: Accept forward traffic
   iptables:
     chain: FORWARD
-    in_interface: "{{ network_interface }}"
+    in_interface: "{{ in_interface }}"
     out_interface: "{{ item }}"
     jump: ACCEPT

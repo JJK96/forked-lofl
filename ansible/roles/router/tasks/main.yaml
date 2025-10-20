@@ -9,11 +9,21 @@
       - socat
       - rsync
       - dnsutils
+      - tmux
     state: present
+- name: Ensure lofl_dir exists
+  file:
+    path: "{{ lofl_dir }}"
+    state: directory
 - name: Copy lofl
   synchronize:
     src: ../../../../
     dest: "{{ lofl_dir }}/"
+    use_ssh_args: true
+    rsync_opts:
+      - "--omit-dir-times"
+      - "--omit-link-times"
+      - "--exclude=.git"
 - name: Install tun2socks
   block:
     - name: Download tun2socks
@@ -37,8 +47,11 @@
   ignore_errors: true
 - name: Configure NAT
   include_tasks: configure_nat.yaml
+  loop: "{{out_interfaces}}"
+- name: Configure NAT for {{ tunnel_name }}
+  include_tasks: configure_nat.yaml
   loop:
-    - tun1
+    - "{{tunnel_name}}"
 - name: Install tun2socks systemd service
   template:
     src: "../templates/tun2socks.service.j2"

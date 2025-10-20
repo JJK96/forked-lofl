@@ -1,0 +1,27 @@
+{{ ansible_managed | comment }}
+
+client
+tls-client
+pull
+dev tun
+proto udp
+remote {{ ansible_default_ipv4.address }} 1194 udp
+resolv-retry infinite
+nobind
+user nobody
+group {{ openvpn_group }}
+persist-key
+persist-tun
+verb 3
+<ca>
+{{ ca_crt_contents }}
+</ca>
+<cert>
+{{ client_crt_contents }}
+</cert>
+<key>
+{{ client_key_contents }}
+</key>
+auth SHA512
+script-security 2
+up /etc/openvpn/update-resolv-conf

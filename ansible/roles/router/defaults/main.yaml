@@ -7,3 +7,7 @@ tunnel_subnet: "{{ tunnel_ip }}/15"
 username: root
 proxy: socks5://127.0.0.1:8080
 default_dns: 8.8.8.8
+in_interface: tun0
+out_interfaces:
+  - eth0
+vpn: true

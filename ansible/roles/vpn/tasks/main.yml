@@ -1,0 +1,55 @@
+- name: Deploy OpenVPN server
+  ansible.builtin.include_role:
+    name: robertdebock.openvpn
+  vars:
+    openvpn_role: "server"
+
+- name: Template server config
+  template:
+    src: server.conf.j2
+    dest: /etc/openvpn/server.conf
+
+- name: Restart OpenVPN service
+  ansible.builtin.systemd:
+    name: openvpn
+    state: restarted
+    enabled: true
+
+- name: Copy certificates and keys from the server to the client
+  ansible.builtin.copy:
+    src: /etc/openvpn/easy-rsa/pki/{{ item }}
+    dest: /etc/openvpn/client/{{ item | basename }}
+    mode: "0640"
+    remote_src: true
+  loop:
+    - ca.crt
+    - issued/client.crt
+    - private/client.key
+    - ta.key
+
+- name: Read client file contents
+  include_tasks: read_client_file_contents.yml
+  loop:
+    - ca.crt
+    - client.crt
+    - client.key
+    - ta.key
+
+- name: Create openvpn client
+  template:
+    src: client.conf.j2
+    dest: /etc/openvpn/client.conf
+    mode: 644
+
+- name: Allow traffic to VPN
+  community.general.ufw:
+    state: enabled
+    rule: allow
+    port: 1194
+    proto: udp
+
+- name: Allow traffic through VPN
+  community.general.ufw:
+    state: enabled
+    rule: allow
+    interface_in: tun0

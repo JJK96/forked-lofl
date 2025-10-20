@@ -9,7 +9,7 @@ I gave my VM 1GB of memory and 1 CPU.
 
 Define your variables in `vars.yaml`, see `vars.example.yaml` for inspiration.
 
-Execute using the following command, where `router_vm` is the VM where you want to run the router in:
+Execute using the following command, where `router_vm` is the VM where you want to run the router in. Ensure you sign in as root to this VM:
 
     ansible-playbook -i router_vm, playbook.yaml -e @vars.yaml
 

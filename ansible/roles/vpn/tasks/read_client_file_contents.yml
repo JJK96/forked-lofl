@@ -1,0 +1,7 @@
+- name: Read {{item}}
+  shell: "cat /etc/openvpn/client/{{item}}"
+  register: output
+
+- name: Set fact
+  set_fact:
+    "{{item | replace('.', '_') }}_contents": "{{output.stdout}}"
