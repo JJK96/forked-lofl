@@ -80,10 +80,14 @@
     src: "../templates/dns_over_tcp.service.j2"
     dest: "/etc/systemd/system/dns_over_tcp.service"
 - name: Disable systemd resolved
+  register: service_stop
   systemd:
     name: systemd-resolved
     enabled: false
     state: stopped
+  ignore_errors: true
+  failed_when: 
+    - '"Could not find the requested service" not in service_stop.msg'
 - name: Start and enable dns_over_tcp service
   systemd:
     daemon_reload: true
